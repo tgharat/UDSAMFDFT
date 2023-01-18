@@ -1,0 +1,45 @@
+# b) Fast Fourier Transform to compute DFT # FFT Operations
+im=np.array(Image.open("garden2.jpg").convert('L')) 
+snr=signaltonoise(im, axis=None)
+print("SNR for the original Image =" +str(snr))
+freq=fp.fft2(im)
+im1=fp.ifft2(freq).real
+snr=signaltonoise(im1,axis=None)
+print('SNR for the original Image =' +str(snr))
+assert(np.allclose(im,im1))
+pylab.figure(figsize=(10,10))
+pylab.subplot(121),
+pylab.imshow(im, cmap='gray'),
+pylab.axis('on') 
+pylab.title('original image' ,size=10)
+pylab.subplot(122),
+pylab.imshow(im, cmap='gray'),
+pylab.axis('on')
+pylab.title('reconstructed image' ,size=10)
+#SNR for the original Image =2.4397639089933434
+#SNR for the original Image =2.439763908993343
+
+#Text(0.5, 1.0, 'reconstructed image')
+freq2=fp.fftshift(freq)
+pylab.figure(figsize=(5,5)),
+pylab.imshow(20*np.log10(0.1+freq2).astype(int)),
+pylab.show()
+In [43]: #FFT with numpy
+import numpy.fft as fp 
+im1=rgb2gray(imread("garden2.jpg")) 
+pylab.figure(figsize=(12,10))
+freq1=fp.fft2(im1) 
+im1=fp.ifft2(im1).real
+pylab.subplot(3,2,1), 
+pylab.imshow(im1, cmap='gray')
+pylab.title('Original Image', size=10)
+pylab.subplot(3,2,2),
+pylab.imshow(20*np.log10(0.01 + np.abs(fp.fftshift(freq1)))) 
+pylab.title('FFT spectrum Magnitude', size=10)
+pylab.subplot(3,2,3), 
+pylab.imshow(np.angle(fp.fftshift(freq1)), cmap='gray') 
+pylab.title('FFT Phase' , size=10)
+pylab.subplot(3,2,4), 
+pylab.imshow(np.clip(im,0,255), cmap='gray') 
+pylab.title('reconstructed Image', size=10),
+pylab.show()
